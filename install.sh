@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/zsh
 
 # Quit if you encounter error
 set -e
