@@ -1,0 +1,67 @@
+[user]
+    email = dtsdwarak@hotmail.com
+	name = Dwaraka Nath
+[color]
+	ui = true
+[push]
+	default = simple
+[alias]
+	addnw=!sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
+    dag = log --graph --format='format:%C(yellow)%h%C(reset) %C(blue)\"%an\" <%ae>%C(reset) %C(magenta)%ar%C(reset)%C(auto)%d%C(reset)%n%s' --date-order
+	slog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset%s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    url = config --get remote.origin.url
+    filediff = "!f() { git diff-tree --no-commit-id --name-only -r $1; }; f"
+    co = checkout
+    user = "!f() { git config user.name; git config user.email; }; f"
+    latest = "!f() { git slog --color | head -${1:-5}; echo "\n"}; f"
+    nuke = "!f() { git reset --hard ${1:-HEAD}; }; f"
+    cp = cherry-pick
+    web = instaweb
+    repostat = for-each-ref --sort='authordate:iso8601' --format=' %(color:green)%(authordate:relative)%09%(color:white)%(refname:short)' refs/heads
+    delall = "!f() { git branch | sed 's/[ *]//g' | grep -wv \"^$1$\" | xargs git branch -D; }; f"
+	uncommit = reset --soft HEAD^
+    unstage = restore --staged
+    unstageall = reset
+  	staged = diff --cached
+    branches=!sh -c '$HOME/.dotfilerc/git/git-branch.sh'
+    bb=!sh -c '$HOME/.dotfilerc/git/better-git-branch.sh'
+    ri = "!f() { git rebase -i HEAD~$1; }; f"
+    wip = !git add --all && git commit -m 'WIP'
+    db = "!f() { git remote show origin | sed -n '/HEAD branch/s/.*: //p'; }; f"
+    prom = !sh -c 'git pull -r origin $(git db)'
+[instaweb]
+    httpd = lighttpd
+    port = 9999
+    local = false
+[help]
+    autocorrect = 1
+[core]
+	pager = diff-so-fancy | less --tabs=4 -RFX
+    editor = vi
+    untrackedCache = true
+[color "status"]
+    added = green
+    changed = yellow
+    untracked = red
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[pull]
+    rebase = true
+[diff]
+	algorithm = histogram
+[init]
+	defaultBranch = main
+[rerere]
+	enabled = true
+[branch]
+	sort = -committerdate

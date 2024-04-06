@@ -1,0 +1,9 @@
+mkcd () {
+    mkdir "$1"
+    cd "$1"
+}
+
+# Experimental
+alias cd='pushd > /dev/null'
+alias back='popd > /dev/null'
+

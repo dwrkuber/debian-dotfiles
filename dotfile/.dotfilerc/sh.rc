@@ -1,0 +1,171 @@
+#=====================================
+# COLOR VARIABLES FOR PRINT STATEMENTS
+#=====================================
+
+GREEN='\033[1;32m'
+RED='\033[1;31m'
+BLUE='\033[1;36m'
+RESET_COLOR='\033[0m'
+
+#====================================
+# ENV VARIABLES
+#====================================
+
+export DOCKER_HOST=unix:///var/run/docker.sock
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
+export LESS='-R --use-color -Dd+r$Du+b'
+
+#=====================================
+# SOURCING OTHER CONFIG FILES
+#=====================================
+
+source $HOME/.dotfilerc/explorer/explorer.rc
+source $HOME/.dotfilerc/utilities/extract.sh
+source $HOME/.dotfilerc/utilities/kp.sh
+source $HOME/.dotfilerc/utilities/sdkman.rc
+source $HOME/.asdf/asdf.sh
+export PATH=$PATH:$HOME/.dotfilerc/utilities/
+
+case $(uname) in
+  Linux)
+    source $HOME/.dotfilerc/linux.rc
+    ;;
+  Darwin)
+    source $HOME/.dotfilerc/mac.rc
+    ;;
+esac
+
+#=====================================
+# ALIASES
+#=====================================
+
+alias projects="cd ~/projects"
+alias lcat="pygmentize -g" # install python-pygments from your package manager; Colorize your cat output
+alias vi=vim
+
+# pydf for df
+alias df=pydf
+
+# public ip
+alias publicip="curl https://api.ipify.org"
+
+# Speedtest
+alias speedtest="wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test10.zip"
+
+# rsync with progress
+alias rsync='rsync --info=progress2'
+
+# hosts
+alias hosts='sudo vim /etc/hosts'
+
+# Top
+alias top="htop"
+
+# Gzip as pigz
+# Learn more about pigz here - http://zlib.net/pigz/
+alias gzip=pigz
+alias gunzip=unpigz
+
+# Display path
+alias path='echo $PATH | tr ":" "\n" | nl'
+
+# fzf aliases
+alias preview="fzf --preview 'bat {}'"
+alias see='vi $(preview)'
+alias proj='cd $HOME/projects/$(\ls -d $HOME/projects/* | rev | cut -d"/" -f 1 | rev | fzf)'
+alias projects=proj
+export BAT_CONFIG_PATH="$HOME/.dotfilerc/batconfig"
+
+# youtube-dl aliases
+
+alias youtube-dl-best='youtube-dl -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio" '
+alias youtube-dl-mp3='youtube-dl -x --audio-format mp3 '
+alias youtube-dl-playlist='youtube-dl -f best -ciw  -o "%(playlist_index)s - %(title)s.%(ext)s" --all-subs --skip-download -v '
+
+# kitty ssh
+# https://sw.kovidgoyal.net/kitty/kittens/ssh/
+if [ "$TERM" = 'xterm-kitty' ]; then
+  alias ssh="kitty +kitten ssh"
+fi
+
+#=====================================
+# FUNCTIONS
+#=====================================
+
+# Help
+function help() {
+     printf "\n${BLUE} ================ MAN PAGES ================ ${RESET_COLOR}\n"
+     tldr $1
+     printf "\n${BLUE} ================ EXAMPLES ================ ${RESET_COLOR}\n\n\n\n\n"
+     curl cht.sh/$1
+ }
+
+
+# Pretty Print CSV
+# Reference - https://www.stefaanlippens.net/pretty-csv.html
+function pretty_csv {
+    column -t -s, -n "$@" | less -F -S -X -K
+}
+
+
+## To start temp server
+pys() {
+    if [[ $(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' | cut -d'.' -f1) == 2 ]]; then
+        printf "\n${GREEN}Content ready to be served at http://$(hostname):${1:-9000}${RESET_COLOR}\n"
+        python -m SimpleHTTPServer ${1:-9000}
+    elif [[ $(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' | cut -d'.' -f1) = 3 ]]; then
+        printf "\n${GREEN}Content ready to be served at http://$(hostname):${1:-9000}${RESET_COLOR}\n"
+        python -m http.server ${1:-9000}
+    else
+        printf "\n${RED}Python version not known. Cannot start a server.${RESET_COLOR}\n"
+    fi
+}
+
+# Local ip address
+localip() {
+    ip addr show | grep -w "inet" | tr -s ' ' | awk -F' ' '{print $NF " - " $2}'
+}
+
+# To view json files in pretty format and syntax highlight
+jsonview() {
+    if [ -z "$1" ]; then
+        echo "jsonview: Input file missing. Please provide one."
+    else
+        python -mjson.tool $1 | pygmentize -l json
+    fi
+}
+
+# To shorten urls
+# For more information on Bitly URL shortening, read the documentation https://dev.bitly.com/links.html#v3_shorten
+bitly() {
+    if [ -z "$1" ]; then
+        echo "bitly: Enter URL to shorten"
+    else
+        curl -s "https://api-ssl.bitly.com/v3/shorten?access_token=$ACCESS_TOKEN&longUrl=$1" | python -mjson.tool | grep -w "url"
+    fi
+}
+
+# Pushbullet API push mechanism
+pushb() {
+curl -s --header 'Access-Token: '$PUSH_BULLET_ACCESS_TOKEN \
+     --header 'Content-Type: application/json' \
+     --data-binary '{"body":"'"$2"'","title":"'"$1"'","type":"note"}' \
+     --request POST \
+     https://api.pushbullet.com/v2/pushes > /dev/null
+}
+
+# To execute everytime before a prompt
+function PS1_curDir() {
+    curDir=$(pwd | sed -e 's#'"${HOME}"'#~#g')
+    pwdPathSize=20
+    if [ "$(echo "$curDir" | wc -c)" -gt $pwdPathSize ];
+    then
+        curDir="$( echo $curDir | awk -F'/' '{print $1"/"$2"/.../"$(NF-1)"/"$NF }' )"
+    fi
+}
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+eval "$(thefuck --alias)"
