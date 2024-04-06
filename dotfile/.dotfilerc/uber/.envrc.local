@@ -1,0 +1,31 @@
+DIRENV_ALIAS_DIR=$PWD/vendor/.direnv/aliases
+rm -rf "$DIRENV_ALIAS_DIR"
+mkdir -p "$DIRENV_ALIAS_DIR"
+PATH_add "$DIRENV_ALIAS_DIR"
+
+# This is a modified version of the following - 
+# https://github.com/direnv/direnv/issues/73#issuecomment-174295790
+export_alias() {
+  local name=$1
+  shift
+  local target="$DIRENV_ALIAS_DIR/$name"
+  echo "#!/usr/bin/env bash -e" > "$target"
+  echo "$@ \$*" >> "$target"
+  chmod +x "$target"
+}
+
+export_function() {
+  local name=$1
+  local target="$DIRENV_ALIAS_DIR/$name"
+  if declare -f "$name" >/dev/null; then
+    echo "#!$SHELL" > "$target"
+    declare -f "$name" >> "$target" 2>/dev/null
+    # Notice that we add shell variables to the function trigger.
+    echo "$name \$*" >> "$target"
+    chmod +x "$target"
+  fi
+}
+
+export_alias gb "git-bzl"
+# export_function gb "git-bzl"
+

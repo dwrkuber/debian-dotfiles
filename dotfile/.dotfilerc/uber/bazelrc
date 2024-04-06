@@ -1,0 +1,52 @@
+#=====================================
+# bb = bazel build specified packages
+#=====================================
+function bb() {
+  args=$*
+  if [[ $args == "" ]]; then
+    >&2 echo "No arguments provided. Taking current working directory instead"
+    args=$(pwd)
+  fi
+  for p in $args; do
+    echo
+    p=$(echo $p | sed 's|.*src/code.uber.internal/||')
+    echo ">>>> Building [//src/code.uber.internal/$p]"
+    echo
+    builds=$(find src/code.uber.internal/$p -name BUILD.bazel)
+    set -x
+    go fmt code.uber.internal/$p/...              && \
+    gazelle src/code.uber.internal/$p             && \
+    buildifier $(echo $builds)                    && \
+    bazel build  //src/code.uber.internal/$p/...  && \
+    setup-gopath //src/code.uber.internal/$p/...
+    if ! [[ "$?" == "0" ]]; then
+      return
+    fi
+    set +x
+  done
+}
+
+#=====================================
+# bazel test specified packages
+#=====================================
+function bt() {
+  args=$*
+  if [[ $args == "" ]]; then
+    >&2 echo "No arguments provided. Taking current working directory instead"
+    args=$(pwd)
+  fi
+  for p in $args; do
+    echo
+    p=$(echo $p | sed 's|.*src/code.uber.internal/||')
+    echo ">>>> Testing [//src/code.uber.internal/$p]"
+    echo
+    set -x
+    bazel test //src/code.uber.internal/$p/...
+    # You can also do:
+    # bazel test --cache_test_results=no --@io_bazel_rules_go//go/config:race //src/code.uber.internal/$p/...
+    if ! [[ "$?" == "0" ]]; then
+      return
+    fi
+    set +x
+  done
+}

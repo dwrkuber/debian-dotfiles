@@ -19,6 +19,8 @@ export LESS='-R --use-color -Dd+r$Du+b'
 # SOURCING OTHER CONFIG FILES
 #=====================================
 
+source $HOME/.dotfilerc/uber/shellrc
+source $HOME/.dotfilerc/uber/utils/uss.sh
 source $HOME/.dotfilerc/explorer/explorer.rc
 source $HOME/.dotfilerc/utilities/extract.sh
 source $HOME/.dotfilerc/utilities/kp.sh
