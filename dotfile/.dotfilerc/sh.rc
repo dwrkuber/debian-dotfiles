@@ -12,8 +12,8 @@ RESET_COLOR='\033[0m'
 #====================================
 
 export DOCKER_HOST=unix:///var/run/docker.sock
-export MANPAGER="less -R --use-color -Dd+r -Du+b"
-export LESS='-R --use-color -Dd+r$Du+b'
+# export MANPAGER="less -R --use-color -Dd+r -Du+b"
+# export LESS='-R --use-color -Dd+r$Du+b'
 
 #=====================================
 # SOURCING OTHER CONFIG FILES
