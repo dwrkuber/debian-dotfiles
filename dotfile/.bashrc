@@ -16,7 +16,7 @@ complete -C aws_completer aws
 
 # Terminal prompt
 # Guide to setting up your own PS1 variable : http://www.cyberciti.biz/tips/howto-linux-unix-bash-shell-setup-prompt.html
-export PS1='\[\e[1;35m\]$LOGIN_INFO\[\e[1;32m\][$curDir] \[\e[1;36m\]$(val=( $(git branch 2>/dev/null | grep "*" | colrm 1 2) ); if [ ! -z "$val" ]; then echo "($val) "; fi)\n\[\e[1;32m\]$ \[\e[m\]'
+export PS1='\[\e[0;35m\]$LOGIN_INFO\[\e[1;32m\][$curDir] \[\e[1;36m\]$(val=( $(git branch 2>/dev/null | grep "*" | colrm 1 2) ); if [ ! -z "$val" ]; then echo "($val) "; fi)\n\[\e[1;32m\]$ \[\e[m\]'
 
 # For Traversing up the directory structure in bash. Thanks to http://stackoverflow.com/a/17030976
 cd..() {

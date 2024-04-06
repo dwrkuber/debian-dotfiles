@@ -30,13 +30,6 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && $(yes | ~/.fzf
 # ASDF Install
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0 || echo "asdf already installed"
 
-# Install SDKMan
-if [ ! -d "$HOME/.sdkman" ]; then
-    echo "sdkman could not be found. Installing..."
-    curl -s "https://get.sdkman.io" | bash
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
 printf "\n\n${GREEN} Stowing dotfiles... ${RESET_COLOR} \n"
 
 get_backup .bash_profile 
@@ -100,5 +93,9 @@ printf "\n\n${GREEN} Installing rust binaries... ${RESET_COLOR} \n"
 cargo install bat exa fd-find procs du-dust ripgrep eva lsd
 asdf reshim rust # Need to reshim post cargo binary installs https://github.com/code-lever/asdf-rust/issues/14
 
+printf "\n\n${GREEN} Installing java... ${RESET_COLOR} \n"
+asdf plugin add java || echo "java already installed"
+asdf install java corretto-11.0.22.7.1 || echo "java already installed"
+asdf global java corretto-11.0.22.7.1 || echo "java already installed"
 
 printf "\n\n${GREEN}Dotfile installation successful! ${RESET_COLOR} \n"

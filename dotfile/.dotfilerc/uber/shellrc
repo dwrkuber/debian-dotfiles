@@ -5,6 +5,7 @@ alias sso='printf "\n${BLUE} -------- ussh Login -------- ${RESET_COLOR}\n\n" \
            && open -a Firefox "https://uber.onelogin.com/" \
            && open -a Google\ Chrome "https://uber.onelogin.com/"'
 
-alias wp='cd $UBER_HOME/$(ls $UBER_HOME | fzf)'
+UBER_HOME_DIR= ${UBER_HOME:-$HOME}
+alias wp='cd $UBER_HOME_DIR/$(ls $UBER_HOME | fzf)'
 
-source $HOME/dwarak_dotfiles/uber/bazelrc
+source $HOME/.dotfilerc/uber/bazelrc

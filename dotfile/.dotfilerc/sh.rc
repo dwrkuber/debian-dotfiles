@@ -24,7 +24,6 @@ source $HOME/.dotfilerc/uber/utils/uss.sh
 source $HOME/.dotfilerc/explorer/explorer.rc
 source $HOME/.dotfilerc/utilities/extract.sh
 source $HOME/.dotfilerc/utilities/kp.sh
-source $HOME/.dotfilerc/utilities/sdkman.rc
 source $HOME/.asdf/asdf.sh
 export PATH=$PATH:$HOME/.dotfilerc/utilities/
 
@@ -165,9 +164,5 @@ function PS1_curDir() {
         curDir="$( echo $curDir | awk -F'/' '{print $1"/"$2"/.../"$(NF-1)"/"$NF }' )"
     fi
 }
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 eval "$(thefuck --alias)"
