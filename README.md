@@ -6,7 +6,7 @@
 
 ## Install
 ```
-$ <sudo> make install
+$ <sudo -E> make install
 $ make help # For Help options
 ```
 
