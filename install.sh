@@ -72,6 +72,9 @@ case $(echo "$SHELL" | rev | cut -d'/' -f1 | rev) in
     ;;
 esac
 
+echo "debug logs - current user - $(whoami)"
+echo "debug logs - target user - $CURRENT_USER"
+
 printf "\n\n%b Copied all source files %b \n" "$GREEN" "$RESET_COLOR"
 
 # For ruby version install check https://stackoverflow.com/a/77857095/2981954
