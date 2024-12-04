@@ -6,6 +6,7 @@ set -e
 # Color constants
 GREEN='\033[1;32m'
 RESET_COLOR='\033[0m'
+CURRENT_USER=$(cat /etc/passwd | grep -P "home/user" | cut -d: -f1)
 
 printf "\n%bInstalling generic dependencies for Ubuntu...%b\n\n" "$GREEN" "$RESET_COLOR"
 
@@ -90,7 +91,7 @@ printf "\n\n%b Installing rust... %b \n" "$GREEN" "$RESET_COLOR"
 mise use -g rust@latest || echo "rust already installed"
 
 printf "\n\n%b Installing rust binaries... %b \n" "$GREEN" "$RESET_COLOR"
-cargo install bat exa fd-find procs du-dust ripgrep eva lsd
+sudo -H -u "$CURRENT_USER" bash -l -c 'cargo install bat exa fd-find procs du-dust ripgrep eva lsd'
 mise reshim rust
 
 printf "\n\n%b Installing java... %b \n" "$GREEN" "$RESET_COLOR"
