@@ -75,25 +75,26 @@ printf "\n\n%b Copied all source files %b \n" "$GREEN" "$RESET_COLOR"
 
 # For ruby version install check https://stackoverflow.com/a/77857095/2981954
 printf "\n\n%b Installing ruby... %b \n" "$GREEN" "$RESET_COLOR"
-mise use ruby@3.3.6 || echo "Ruby already installed"
+mise use -g ruby@3.3.6 || echo "Ruby already installed"
 
 printf "\n\n%b Installing nodejs... %b \n" "$GREEN" "$RESET_COLOR"
-mise use nodejs@20.12.0 || echo "nodejs already installed"
+mise use -g nodejs@20.12.0 || echo "nodejs already installed"
 
 printf "\n\n%b Installing python... %b \n" "$GREEN" "$RESET_COLOR"
-mise use python@3.12.0 || echo "python already installed"
+mise use -g python@3.12.0 || echo "python already installed"
 
 printf "\n\n%b Installing pip packages... %b \n" "$GREEN" "$RESET_COLOR"
 pip install Pygments tldr csvkit pgcli pyyaml || echo "All packages already installed"
 
 printf "\n\n%b Installing rust... %b \n" "$GREEN" "$RESET_COLOR"
-mise use rust@latest || echo "rust already installed"
-
-printf "\n\n%b Installing java... %b \n" "$GREEN" "$RESET_COLOR"
-mise use java@corretto-11.0.25.9.1 || echo "java already installed"
+mise use -g rust@latest || echo "rust already installed"
 
 printf "\n\n%b Installing rust binaries... %b \n" "$GREEN" "$RESET_COLOR"
 cargo install bat exa fd-find procs du-dust ripgrep eva lsd
+mise reshim rust
+
+printf "\n\n%b Installing java... %b \n" "$GREEN" "$RESET_COLOR"
+mise use -g java@corretto-11.0.25.9.1 || echo "java already installed"
 
 mise use direnv || echo "direnv already installed"
 mise reshim direnv
