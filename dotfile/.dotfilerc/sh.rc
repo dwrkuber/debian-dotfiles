@@ -24,7 +24,6 @@ source "$HOME"/.dotfilerc/uber/utils/uss.sh
 source "$HOME"/.dotfilerc/explorer/explorer.rc
 source "$HOME"/.dotfilerc/utilities/extract.sh
 source "$HOME"/.dotfilerc/utilities/kp.sh
-source "$HOME"/.asdf/asdf.sh
 export PATH="$PATH":"$HOME"/.dotfilerc/utilities/
 
 case $(uname) in
