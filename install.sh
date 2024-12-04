@@ -26,8 +26,17 @@ ruby-build thefuck software-properties-common stow bash zsh coreutils img2pdf da
 # Install via git to include shell-bindings since it is currently not supported if installed via package manager in Ubuntu
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && $(yes | ~/.fzf/install) || echo "fzf already installed" 
 
-# ASDF Install
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0 || echo "asdf already installed"
+# Mise install
+CPU_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then
+  CPU_ARCH=arm64
+fi
+apt update -y && apt install -y gpg sudo wget curl
+sudo install -dm 755 /etc/apt/keyrings
+wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=$CPU_ARCH] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+apt update
+apt install -y mise
 
 printf "\n\n%b Stowing dotfiles... %b \n" "$GREEN" "$RESET_COLOR"
 
@@ -66,41 +75,27 @@ printf "\n\n%b Copied all source files %b \n" "$GREEN" "$RESET_COLOR"
 
 # For ruby version install check https://stackoverflow.com/a/77857095/2981954
 printf "\n\n%b Installing ruby... %b \n" "$GREEN" "$RESET_COLOR"
-asdf plugin add ruby || echo "Ruby already installed"
-asdf install ruby 3.3.0 || echo "Ruby already installed"
-asdf global ruby 3.3.0 || echo "Ruby already installed"
+mise use ruby@3.3.6 || echo "Ruby already installed"
 
 printf "\n\n%b Installing nodejs... %b \n" "$GREEN" "$RESET_COLOR"
-asdf plugin add nodejs || echo "nodejs already installed"
-asdf install nodejs 20.12.0 || echo "nodejs already installed"
-asdf global nodejs 20.12.0 || echo "nodejs already installed"
+mise use nodejs@20.12.0 || echo "nodejs already installed"
 
 printf "\n\n%b Installing python... %b \n" "$GREEN" "$RESET_COLOR"
-asdf plugin add python || echo "python already installed"
-asdf install python 3.12.0 || echo "python already installed"
-asdf global python 3.12.0 || echo "python already installed"
+mise use python@3.12.0 || echo "python already installed"
 
 printf "\n\n%b Installing pip packages... %b \n" "$GREEN" "$RESET_COLOR"
 pip install Pygments tldr csvkit pgcli pyyaml || echo "All packages already installed"
 
 printf "\n\n%b Installing rust... %b \n" "$GREEN" "$RESET_COLOR"
-asdf plugin add rust || echo "rust already installed"
-asdf install rust 1.77.0 || echo "rust already installed"
-asdf global rust 1.77.0 || echo "rust already installed"
+mise use rust@latest || echo "rust already installed"
+
+printf "\n\n%b Installing java... %b \n" "$GREEN" "$RESET_COLOR"
+mise use java@corretto-11.0.25.9.1 || echo "java already installed"
 
 printf "\n\n%b Installing rust binaries... %b \n" "$GREEN" "$RESET_COLOR"
 cargo install bat exa fd-find procs du-dust ripgrep eva lsd
-asdf reshim rust # Need to reshim post cargo binary installs https://github.com/code-lever/asdf-rust/issues/14
 
-printf "\n\n%b Installing java... %b \n" "$GREEN" "$RESET_COLOR"
-asdf plugin add java || echo "java already installed"
-asdf install java corretto-11.0.22.7.1 || echo "java already installed"
-asdf global java corretto-11.0.22.7.1 || echo "java already installed"
-
-printf "\n\n%b Installing direnv... %b \n" "$GREEN" "$RESET_COLOR"
-asdf plugin add direnv || echo "direnv already installed"
-asdf direnv setup --shell zsh --version latest || echo "direnv already installed"
-asdf direnv setup --shell bash --version latest || echo "direnv already installed"
-asdf reshim direnv
+mise use direnv || echo "direnv already installed"
+mise reshim direnv
 
 printf "\n\n%bDotfile installation successful! %b \n" "$GREEN" "$RESET_COLOR"
