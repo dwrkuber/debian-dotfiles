@@ -97,6 +97,7 @@ mise use -g rust@latest || echo "rust already installed"
 
 printf "\n\n%b Installing rust binaries... %b \n" "$GREEN" "$RESET_COLOR"
 sudo chown -R "$CURRENT_USER" $CURRENT_USER_HOME/.cargo
+sudo chwon -R "$CURRENT_USER" $CURRENT_USER_HOME/.cache/mise
 sudo -H -u "$CURRENT_USER" bash -l -c "$CURRENT_USER_HOME/.cargo/bin/cargo install bat exa fd-find procs du-dust ripgrep eva lsd"
 mise reshim rust
 
