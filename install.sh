@@ -94,6 +94,7 @@ printf "\n\n%b Installing rust... %b \n" "$GREEN" "$RESET_COLOR"
 mise use -g rust@latest || echo "rust already installed"
 
 printf "\n\n%b Installing rust binaries... %b \n" "$GREEN" "$RESET_COLOR"
+sudo chown -R "$CURRENT_USER" /home/user/.cargo
 sudo -H -u "$CURRENT_USER" bash -l -c 'cargo install bat exa fd-find procs du-dust ripgrep eva lsd'
 mise reshim rust
 
